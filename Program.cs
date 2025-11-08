@@ -23,10 +23,19 @@ var notes = new Dictionary<string, double>
 
 var song = new char[] { 'G', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'G' };
 
-foreach (var note in song)
-{
-   player.PlayRaw(sound.CreateSample(notes[note.ToString()])); 
-}
+var fiveSecC = sound.CreateSample(notes["C"], 5);
+Console.WriteLine($"Lenght of five buffer: {fiveSecC?.Buffer?.Length}");
+player.PlayRaw(fiveSecC);
+
+
+var oneSecC = sound.CreateSample(notes["D"], 1);
+Console.WriteLine($"Lenght of one buffer: {oneSecC?.Buffer?.Length}");
+player.PlayRaw(oneSecC);
+
+// foreach (var note in song)
+// {
+//    player.PlayRaw(sound.CreateSample(notes[note.ToString()], 2)); 
+// }
 
 // Player.PlayRaw(sound.CreateSample(notes["C"]));
 // Player.PlayRaw(sound.CreateSample(notes["E"]));

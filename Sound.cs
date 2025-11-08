@@ -2,7 +2,7 @@ namespace SoundMaster;
 
 using SampleArray = short[];
 
-public class RawSound
+public class RawSound : ICloneable
 {
     public int SampleRate { get; private set; }
     public double Frequency { get; private set; }
@@ -20,16 +20,24 @@ public class RawSound
         Volume = volume;
     }
 
-    public RawSound CreateSample(double? f = null)
+    public object Clone() => MemberwiseClone();
+
+    public RawSound CreateSample(double? f = null, double? d = null)
     {
         var frequency = f ?? this.Frequency;
+        var duration = d ?? this.Duration;
+        var frames = (int) (SampleRate * duration);
         
-        Buffer = new short[SampleRate];
-        for (var i = 0; i < SampleRate; i++)
+        Buffer = new short[frames];
+        for (var i = 0; i < frames; i++)
         {
             Buffer[i] = (short)(Volume * Math.Sin(2 * Math.PI * frequency * i / SampleRate));
         }
 
-        return this;
+        if(Clone() is not RawSound clone) throw new InvalidCastException();
+        
+        clone.Duration = duration;
+        clone.Frequency = frequency;
+        return clone;
     }
 }
