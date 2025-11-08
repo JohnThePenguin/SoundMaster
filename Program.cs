@@ -7,8 +7,6 @@ using SoundMaster;
 
 var sound = new RawSound();
 using var player = new Player();
-// sound.CreateSample();
-// Player.PlayRaw(sound);
 
 var notes = new Dictionary<string, double>
 {
@@ -21,50 +19,15 @@ var notes = new Dictionary<string, double>
     ["B"] = 493.9,
 };
 
-var song = new char[] { 'G', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'G' };
+var song = new char[]
+{
+    'G', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'G',
+    'G', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'C',
+    'C', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'G',
+    'G', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'C'
+};
 
-var fiveSecC = sound.CreateSample(notes["C"], 5);
-Console.WriteLine($"Lenght of five buffer: {fiveSecC?.Buffer?.Length}");
-player.PlayRaw(fiveSecC);
-
-
-var oneSecC = sound.CreateSample(notes["D"], 1);
-Console.WriteLine($"Lenght of one buffer: {oneSecC?.Buffer?.Length}");
-player.PlayRaw(oneSecC);
-
-// foreach (var note in song)
-// {
-//    player.PlayRaw(sound.CreateSample(notes[note.ToString()], 2)); 
-// }
-
-// Player.PlayRaw(sound.CreateSample(notes["C"]));
-// Player.PlayRaw(sound.CreateSample(notes["E"]));
-// Player.PlayRaw(sound.CreateSample(notes["B"]));
-
-// const int sampleRate = 44100;
-// const double frequency = 640.0;
-// const double duration = 2.0;
-// const short volume = short.MaxValue;
-// const short bitsPerSample = 16;
-//
-// var wave = new short[sampleRate];
-// for (var i = 0; i < sampleRate; i++)
-// {
-//     wave[i] = (short)(volume * Math.Sin((Math.PI * 2 * frequency) * i / sampleRate));
-// }
-//
-// var waveBytes = Player.ConvertShortWaveToByte(wave);
-//
-// Console.WriteLine($"Wave: {string.Join(", ", wave[..5])}");
-// Console.WriteLine($"Bytes: {string.Join(", ", waveBytes[..10])}");
-//
-// Player.PlayPcm(waveBytes, sampleRate, 1, bitsPerSample, duration);
-//
-// while (true)
-// {
-//     var pressedKey =  Console.ReadKey(true);
-//     if (pressedKey.Key == ConsoleKey.UpArrow)
-//     {
-//         Console.WriteLine("Up");
-//     }
-// }
+foreach (var note in song)
+{
+   player.PlayRaw(sound.CreateSample(notes[note.ToString()], 0.7)); 
+}
