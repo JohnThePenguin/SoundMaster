@@ -1,7 +1,5 @@
 namespace SoundMaster;
 
-using SampleArray = short[];
-
 public record EnvelopePoint(double T, double A);
 
 public enum AdsrEnvelopeName
@@ -12,19 +10,14 @@ public enum AdsrEnvelopeName
     Release
 };
 
-public class RawSound : ICloneable
+public class Sound : RawSound, ICloneable
 {
-    public int SampleRate { get; private set; }
     public double Frequency { get; private set; }
-    public double Duration { get; private set; }
     public short Volume { get; private set; }
-    public readonly short BitsPerSample = 16;
-    public SampleArray? Buffer { get; private set; }
-    
     public EnvelopePoint[] AdsrEnvelope { get;  private set; }
 
-    public RawSound(int sampleRate = 44100, double frequency = 440.0, double duration = 1.0,
-        short volume = short.MaxValue)
+    public Sound(int sampleRate = 44100, double frequency = 440.0, double duration = 1.0,
+        short volume = short.MaxValue): base()
     {
         SampleRate = sampleRate;
         Frequency = frequency;
@@ -35,7 +28,7 @@ public class RawSound : ICloneable
 
     public object Clone() => MemberwiseClone();
 
-    public RawSound CreateSample(double? f = null, double? d = null)
+    public Sound GetSample(double? f = null, double? d = null)
     {
         var frequency = f ?? this.Frequency;
         var duration = d ?? this.Duration;
@@ -47,11 +40,7 @@ public class RawSound : ICloneable
             Buffer[i] = (short)(Volume * GetAdsrValue((double)(i)/frames) * Math.Sin(2 * Math.PI * frequency * i / SampleRate));
         }
 
-        if(Clone() is not RawSound clone) throw new InvalidCastException();
-        
-        clone.Duration = duration;
-        clone.Frequency = frequency;
-        return clone;
+        return this;
     }
 
     public double[] SimulateEnvelope()

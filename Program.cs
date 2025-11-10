@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using SoundMaster;
 
-var sound = new RawSound();
+var sound = new Sound();
 using var player = new Player();
 
 var notes = new Dictionary<string, double>
@@ -27,7 +27,14 @@ var song = new char[]
     'G', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'C'
 };
 
+sound.SetAdsrEnvelope([
+    new EnvelopePoint(0, 0),
+    new EnvelopePoint(0.01, 1),
+    new EnvelopePoint(0.2, 0.4),
+    new EnvelopePoint(0.4, 0.4)
+]);
+
 foreach (var note in song)
 {
-   player.PlayRaw(sound.CreateSample(notes[note.ToString()], 0.7)); 
+    player.PlayRaw(sound.GetSample(notes[note.ToString()], 0.5));
 }
