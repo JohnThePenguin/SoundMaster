@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SoundMaster;
 
@@ -25,7 +26,7 @@ public class Player: System.IDisposable
         ALC.CloseDevice(_alDevice);
     }
     
-    public void PlayRaw(byte[] pcm, int sampleRate, int channels, int bitsPerSample, double duration = 1.0)
+    public async Task PlayRaw(byte[] pcm, int sampleRate, int channels, int bitsPerSample, double duration = 1.0)
     {
         int buf = AL.GenBuffer();
         int src = AL.GenSource();
@@ -43,16 +44,17 @@ public class Player: System.IDisposable
         AL.Source(src, ALSourcei.Buffer, buf);
         AL.SourcePlay(src);
 
-        Thread.Sleep((int)(duration * 1000));
+        // Thread.Sleep((int)(duration * 1000));
+        await Task.Delay(TimeSpan.FromSeconds(duration * 1000));
 
         AL.SourceStop(src);
         AL.DeleteSource(src);
         AL.DeleteBuffer(buf);
     }
 
-    public void PlayRaw(RawSound sound)
+    public async Task PlayRaw(RawSound sound)
     {
-        PlayRaw(ConvertShortWaveToByte(sound.Buffer), sound.SampleRate, 1, sound.BitsPerSample, sound.Duration);
+        await PlayRaw(ConvertShortWaveToByte(sound.Buffer), sound.SampleRate, 1, sound.BitsPerSample, sound.Duration);
     }
 
     public static MemoryStream CreateWavStream(byte[] wave, int sampleRate, short bitsPerSample)

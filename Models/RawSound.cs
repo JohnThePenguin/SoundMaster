@@ -21,9 +21,7 @@ public class RawSound
     public double Duration
     {
         get => (double)Buffer.Length / SampleRate;
-        set { Array.Resize(ref _buffer, (int)(SampleRate * value));
-            Buffer = [];
-        }
+        set => Array.Resize(ref _buffer, (int)(SampleRate * value));
     }
 
     public override string ToString()

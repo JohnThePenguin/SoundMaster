@@ -1,9 +1,11 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using SoundMasterGui.ViewModels;
 
 namespace SoundMasterGui.Views.PathBuilder;
 
@@ -26,6 +28,8 @@ public partial class MainGrid : UserControl
     public MainGrid()
     {
         InitializeComponent();
+        DataContext = new PathBuilderViewModel();
+        
         var grid = this.FindControl<Grid>("Grid");
 
         _grid = grid ?? throw new Exception("Grid not found");
@@ -51,7 +55,7 @@ public partial class MainGrid : UserControl
                 };
                 border.AddHandler(
                     InputElement.PointerPressedEvent,
-                    (s, e) => Border_CellPressed(s, e, ci, cj),
+                    (s, e) => Border_CellPressed(s, e, cj, ci),
                     RoutingStrategies.Bubble,
                     handledEventsToo: true
                     );
@@ -67,15 +71,15 @@ public partial class MainGrid : UserControl
         set => SetValue(ColumnsProperty, value);
     }
 
-    private static void Grid_handleBrickChange(Border border, bool right = false)
+    private void Grid_handleBrickChange(Border border, bool right = false, int column = 0, int row = 0)
     {
         if (border.Child == null)
-            Grid_addBrick(border);
+            Grid_addBrick(border, column, row);
         else if (right)
-            Grid_removeBrick(border); 
+            Grid_removeBrick(border);
     }
 
-    private static void Grid_addBrick(Border border)
+    private void Grid_addBrick(Border border, int column, int row)
     {
         var button = new Button
         {
@@ -84,6 +88,12 @@ public partial class MainGrid : UserControl
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch,
         };
+        button.Click += (s, args) =>
+        {
+            Debug.WriteLine("Playing at row " + row);
+            (DataContext as PathBuilderViewModel).PlayIndex(row);
+        };
+        (DataContext as PathBuilderViewModel).PlayIndex(row);
         border.Child = button;
     }
 
@@ -92,12 +102,12 @@ public partial class MainGrid : UserControl
        border.Child = null; 
     }
 
-    private static void Border_CellPressed(object? sender, PointerPressedEventArgs e, int column, int row)
+    private void Border_CellPressed(object? sender, PointerPressedEventArgs e, int column, int row)
     {
         Debug.WriteLine($"Border_CellPressed ({column}, {row})");
         if (sender is Border border)
         {
-            Grid_handleBrickChange(border, e.Properties.IsRightButtonPressed);
+            Grid_handleBrickChange(border, e.Properties.IsRightButtonPressed, column, row);
         }
     }
 

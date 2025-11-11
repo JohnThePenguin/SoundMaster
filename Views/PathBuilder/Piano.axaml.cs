@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using System.Collections.Generic;
 using System.Diagnostics;
+using SoundMasterGui.ViewModels;
 
 namespace SoundMasterGui.Views.PathBuilder;
 
@@ -14,6 +15,7 @@ public partial class Piano : UserControl
     public Piano()
     {
         InitializeComponent();
+        DataContext = new PathBuilderViewModel();
         
         var panel = this.FindControl<StackPanel>("PianoPanel");
         
@@ -26,6 +28,8 @@ public partial class Piano : UserControl
             var name = _noteNames[i % 12] + ((i + 9)/ 12).ToString();
             notes.Add((name, f));
             Debug.WriteLine($"{name} = {f}");
+
+            PathBuilderViewModel.IndexFrequencyBind[i] = f;
         }
 
         foreach (var note in notes)
@@ -37,6 +41,7 @@ public partial class Piano : UserControl
             };
             button.Classes.Add("tile");
             button.Classes.Add(note.Item1.Contains('#') ? "semitone" : "tone");
+            button.Click += (sender, args) => (DataContext as PathBuilderViewModel).PlayFrequency(note.Item2);
             panel?.Children.Add(button);
         }
     }
