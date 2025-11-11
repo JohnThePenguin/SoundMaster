@@ -1,3 +1,7 @@
+using System;
+using System.IO;
+using System.Threading;
+
 namespace SoundMaster;
 
 using OpenTK.Audio.OpenAL;

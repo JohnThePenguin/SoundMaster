@@ -1,3 +1,5 @@
+using System;
+
 namespace SoundMaster;
 
 using SampleArray = short[];

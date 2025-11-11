@@ -1,40 +1,21 @@
-﻿// See https://aka.ms/new-console-template for more information
-
+﻿using Avalonia;
 using System;
-using System.IO;
-using System.Text;
-using SoundMaster;
 
-var sound = new Sound();
-using var player = new Player();
+namespace SoundMasterGui;
 
-var notes = new Dictionary<string, double>
+sealed class Program
 {
-    ["C"] = 261.6,
-    ["D"] = 293.7,
-    ["E"] = 329.6,
-    ["F"] = 349.2,
-    ["G"] = 392.0,
-    ["A"] = 440.0,
-    ["B"] = 493.9,
-};
+    // Initialization code. Don't use any Avalonia, third-party APIs or any
+    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+    // yet and stuff might break.
+    [STAThread]
+    public static void Main(string[] args) => BuildAvaloniaApp()
+        .StartWithClassicDesktopLifetime(args);
 
-var song = new char[]
-{
-    'G', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'G',
-    'G', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'C',
-    'C', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'G',
-    'G', 'E', 'E', 'F', 'D', 'D', 'C', 'E', 'C'
-};
-
-sound.SetAdsrEnvelope([
-    new EnvelopePoint(0, 0),
-    new EnvelopePoint(0.01, 1),
-    new EnvelopePoint(0.2, 0.4),
-    new EnvelopePoint(0.4, 0.4)
-]);
-
-foreach (var note in song)
-{
-    player.PlayRaw(sound.GetSample(notes[note.ToString()], 0.5));
+    // Avalonia configuration, don't remove; also used by visual designer.
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .WithInterFont()
+            .LogToTrace();
 }

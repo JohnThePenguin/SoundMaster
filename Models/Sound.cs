@@ -1,3 +1,5 @@
+using System;
+
 namespace SoundMaster;
 
 public record EnvelopePoint(double T, double A);
