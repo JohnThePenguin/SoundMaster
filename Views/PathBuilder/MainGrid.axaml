@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SoundMasterGui.Views.PathBuilder.MainGrid">
-    
-    <Grid Name="Grid"></Grid>
+   <ScrollViewer HorizontalAlignment="Left">
+       <Grid HorizontalAlignment="Left" Name="Grid"/>
+   </ScrollViewer> 
 </UserControl>

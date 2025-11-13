@@ -3,14 +3,27 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:SoundMasterGui.Views.PathBuilder"
+             xmlns:vm="clr-namespace:SoundMasterGui.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SoundMasterGui.Views.PathBuilder.Builder"
+             x:DataType="vm:PathBuilderViewModel"
              >
     
-    <ScrollViewer HorizontalAlignment="Left">
-        <StackPanel Orientation="Horizontal">
-            <controls:Piano/>
-            <controls:MainGrid Columns="25"/>
+    <ScrollViewer HorizontalAlignment="Stretch">
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                <Canvas IsHitTestVisible="False">
+                    <!-- StartPoint="{Binding PlayingTime, StringFormat='X = {0:F2}'}"  -->
+                    <Line 
+                        StartPoint="{Binding StartPoint}"
+                        EndPoint="{Binding EndPoint}" 
+                        Stroke="Purple" 
+                        StrokeThickness="3"
+                    />
+                </Canvas>
+                <controls:Piano/>
+                <controls:MainGrid Columns="40" Width="950"/>
+            </StackPanel>
         </StackPanel>
     </ScrollViewer> 
     

@@ -24,22 +24,27 @@ public partial class MainGrid : UserControl
         );
     
     private Grid _grid;
+    private PathBuilderViewModel _viewModel;
 
     public MainGrid()
     {
         InitializeComponent();
         DataContext = new PathBuilderViewModel();
+        _viewModel = DataContext as PathBuilderViewModel;
         
         var grid = this.FindControl<Grid>("Grid");
 
         _grid = grid ?? throw new Exception("Grid not found");
+        
+        var columnWidth = 32;
+        grid.Width = columnWidth * Columns;
         
         for (var i = 0; i < 7 * 12 + 3; i++)
             grid?.RowDefinitions.Add(new RowDefinition{Height=new GridLength(26)});
 
         for (var c = 0; c < Columns; c++)
         {
-            grid?.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(50)});
+            grid?.ColumnDefinitions.Add(new ColumnDefinition{Width=new GridLength(columnWidth)});
         }
 
         for (var i = 0; i < 7 * 12 + 3; i++)
@@ -81,19 +86,24 @@ public partial class MainGrid : UserControl
 
     private void Grid_addBrick(Border border, int column, int row)
     {
+        _viewModel.AddSelectedSound(column, row);
+        
         var button = new Button
         {
             Background = Brushes.GreenYellow,
+            Foreground = Brushes.DarkGreen,
+            FontSize = 10,
             BorderThickness = new Thickness(1),
             HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch,
         };
+        button.Content = PathBuilderViewModel.IndexToneNameBind[row];
         button.Click += (s, args) =>
         {
             Debug.WriteLine("Playing at row " + row);
-            (DataContext as PathBuilderViewModel).PlayIndex(row);
+            _viewModel.PlayIndex(row);
         };
-        (DataContext as PathBuilderViewModel).PlayIndex(row);
+        _viewModel.PlayIndex(row);
         border.Child = button;
     }
 

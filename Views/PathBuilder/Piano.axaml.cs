@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Avalonia.Controls.Shapes;
 using SoundMasterGui.ViewModels;
 
 namespace SoundMasterGui.Views.PathBuilder;
@@ -30,6 +31,7 @@ public partial class Piano : UserControl
             Debug.WriteLine($"{name} = {f}");
 
             PathBuilderViewModel.IndexFrequencyBind[i] = f;
+            PathBuilderViewModel.IndexToneNameBind[i] = name;
         }
 
         foreach (var note in notes)
