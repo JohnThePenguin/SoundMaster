@@ -9,21 +9,28 @@
              x:DataType="vm:PathBuilderViewModel"
              >
     
-    <ScrollViewer HorizontalAlignment="Stretch">
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                <Canvas IsHitTestVisible="False">
-                    <!-- StartPoint="{Binding PlayingTime, StringFormat='X = {0:F2}'}"  -->
-                    <Line 
-                        StartPoint="{Binding StartPoint}"
-                        EndPoint="{Binding EndPoint}" 
-                        Stroke="Purple" 
-                        StrokeThickness="3"
-                    />
-                </Canvas>
-                <controls:Piano/>
-                <controls:MainGrid Columns="40" Width="950"/>
-            </StackPanel>
+    <ScrollViewer 
+        Height="720" 
+        Width="1024"
+        HorizontalScrollBarVisibility="Auto"
+        VerticalScrollBarVisibility="Auto"
+        >
+        
+        <StackPanel 
+            HorizontalAlignment="Left" 
+            VerticalAlignment="Stretch"
+            Orientation="Vertical"
+        >
+            <Grid x:Name="TimeGrid" Height="20" HorizontalAlignment="Stretch" Background="GhostWhite"></Grid>
+            <Canvas IsHitTestVisible="False">
+                <Line 
+                    StartPoint="{Binding StartPoint}"
+                    EndPoint="{Binding EndPoint}" 
+                    Stroke="Purple" 
+                    StrokeThickness="3"
+                />
+            </Canvas>
+            <controls:MainGrid Columns="40" Height="700" HorizontalAlignment="Left"/>
         </StackPanel>
     </ScrollViewer> 
     

@@ -1,10 +1,6 @@
 using System;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using SoundMasterGui.ViewModels;
 
 namespace SoundMasterGui.Views.PathBuilder;
@@ -12,7 +8,6 @@ namespace SoundMasterGui.Views.PathBuilder;
 using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Media;
 
 public partial class MainGrid : UserControl
@@ -20,23 +15,26 @@ public partial class MainGrid : UserControl
     public static readonly StyledProperty<int> ColumnsProperty =
         AvaloniaProperty.Register<MainGrid, int>(
             nameof(Columns), 
-            defaultValue: 30
+            defaultValue: 100
         );
     
-    private Grid _grid;
-    private PathBuilderViewModel _viewModel;
+    private readonly PathBuilderViewModel _viewModel;
 
     public MainGrid()
     {
         InitializeComponent();
-        DataContext = new PathBuilderViewModel();
-        _viewModel = DataContext as PathBuilderViewModel;
+        DataContext = TilesGridBuilder.PathBuilderViewModel;
+
+        if (DataContext is PathBuilderViewModel vm)
+            _viewModel = vm;
+        else
+            throw new Exception("DataContext is not PathBuilderViewModel"); 
         
         var grid = this.FindControl<Grid>("Grid");
+        if(grid is null)
+            throw new Exception("Grid not found");
 
-        _grid = grid ?? throw new Exception("Grid not found");
-        
-        var columnWidth = 32;
+        var columnWidth = _viewModel.TileWidth;
         grid.Width = columnWidth * Columns;
         
         for (var i = 0; i < 7 * 12 + 3; i++)
@@ -98,7 +96,7 @@ public partial class MainGrid : UserControl
             VerticalAlignment = Avalonia.Layout.VerticalAlignment.Stretch,
         };
         button.Content = PathBuilderViewModel.IndexToneNameBind[row];
-        button.Click += (s, args) =>
+        button.Click += (_, _) =>
         {
             Debug.WriteLine("Playing at row " + row);
             _viewModel.PlayIndex(row);

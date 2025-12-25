@@ -8,7 +8,9 @@
         x:Class="SoundMasterGui.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="SoundMasterGui">
+        Title="SoundMasterGui"
+        Width="1024"
+        Height="720">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -17,7 +19,7 @@
     </Design.DataContext>
     
     <StackPanel>
-        <controls:Builder Width="1024" Height="700"/>
+        <controls:Builder Width="1024" Height="720"/>
     </StackPanel>
    
     <!-- <StackPanel> -->

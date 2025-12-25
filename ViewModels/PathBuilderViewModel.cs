@@ -23,8 +23,12 @@ public class PathBuilderViewModel : ViewModelBase, IDisposable
     
     private Dictionary<int, (Sound, double)> _sounds = new Dictionary<int, (Sound, double)>();
 
-    public Point StartPoint => new Point(PlayingTime * BitsPerSecond() * 32 + 70, 0);
-    public Point EndPoint => new Point(PlayingTime * BitsPerSecond() * 32 + 70, 1000);
+    public double PianoWidth = 70;
+    public double TileWidth = 32;
+    public double PixelsPerSecond() =>  BitsPerSecond() * TileWidth;
+
+    public Point StartPoint => new Point(PlayingTime * BitsPerSecond() * TileWidth + PianoWidth, 0);
+    public Point EndPoint => new Point(PlayingTime * BitsPerSecond() * TileWidth + PianoWidth, 700);
     
 
     public PathBuilderViewModel()
@@ -110,4 +114,9 @@ public class PathBuilderViewModel : ViewModelBase, IDisposable
     {
        Player.Dispose(); 
     }
+}
+
+public static class TilesGridBuilder
+{
+    public static PathBuilderViewModel PathBuilderViewModel { get; } = new PathBuilderViewModel();
 }
